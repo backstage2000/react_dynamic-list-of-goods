@@ -1,22 +1,26 @@
 import React, { useEffect, useState } from 'react';
 import './App.scss';
-import { GoodsList } from './GoodsList';
+
 import { Good } from './types/Good';
 
 import { sortItems } from './Utils/RenderItems';
 import { GoodsType } from './types/GoodsType';
+import { GoodList } from './GoodsList';
 // or
 // import * as goodsAPI from './api/goods';
 
 export const App: React.FC = () => {
   const [items, setItems] = useState<Good[]>([]);
   const [type, setType] = useState<GoodsType>('');
+  const [hasError, setHasError] = useState<boolean>(false);
 
   useEffect(() => {
+    setHasError(false);
+
     const promise = sortItems(type);
 
     if (promise) {
-      promise.then(setItems);
+      promise.then(setItems).catch(() => setHasError(true));
     }
   }, [type]);
 
@@ -40,7 +44,7 @@ export const App: React.FC = () => {
         Load red goods
       </button>
 
-      <GoodsList goods={items} />
+      {!hasError && <GoodList goods={items} />}
     </div>
   );
 };
