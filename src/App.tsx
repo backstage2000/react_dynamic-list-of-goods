@@ -44,7 +44,11 @@ export const App: React.FC = () => {
         Load red goods
       </button>
 
-      {!hasError && <GoodList goods={items} />}
+      {hasError ? (
+        <p className="error">Failed to load goods. Please try again.</p>
+      ) : (
+        <GoodList goods={items} />
+      )}
     </div>
   );
 };
